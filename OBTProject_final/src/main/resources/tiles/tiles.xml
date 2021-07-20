@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/common/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/common/side.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+
+   <definition name="mainboard" extends="baseLayout">
+      <put-attribute name="title" value="메인게시판" />
+      <put-attribute name="body" value="/WEB-INF/views/mainboard.jsp" />
+   </definition>
+
+
+   <definition name="/board/report_boardlist" extends="baseLayout">
+      <put-attribute name="title" value="신고게시판" />
+      <put-attribute name="body" value="/WEB-INF/views/board/report_boardlist.jsp" />
+   </definition>
+   
+
+    
+   <definition name="/board/report_boardForm" extends="baseLayout">
+      <put-attribute name="title" value="신고 게시판 글쓰기창" />
+      <put-attribute name="body" value="/WEB-INF/views/board/report_boardForm.jsp" />
+   </definition>
+      
+
+   <definition name="/board/report_boardView" extends="baseLayout">
+      <put-attribute name="title" value="글보기" />
+      <put-attribute name="body" value="/WEB-INF/views/board/report_boardView.jsp" />
+   </definition>
+   
+   <definition name="/board/report_boardReplyForm" extends="baseLayout">
+      <put-attribute name="title" value="답글 달기" />
+      <put-attribute name="body" value="/WEB-INF/views/board/report_boardReplyForm.jsp" />
+   </definition>
+
+</tiles-definitions>

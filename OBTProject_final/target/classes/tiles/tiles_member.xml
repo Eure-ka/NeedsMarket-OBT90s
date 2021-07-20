@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+   <definition name="/member/memberInfo" extends="baseLayout">
+      <put-attribute name="title" value="회원정보" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberInfo.jsp" />
+   </definition>
+   
+   <definition name="/member/memberDeleteView" extends="baseLayout">
+      <put-attribute name="title" value="회원탈퇴" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberDeleteView.jsp" />
+   </definition>
+   
+</tiles-definitions>

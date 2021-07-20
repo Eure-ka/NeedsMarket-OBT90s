@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.reply">
+	<!-- 리절트 맵 정의 -->
+	<resultMap id="replyResult" type="replyVO">
+
+		<result property="reply_no" column="reply_no" />
+		<result property="reply_content" column="reply_content" />
+		<result property="reply_date" column="reply_date" />
+		<result property="fb_number" column="fb_number" />
+		<result property="tb_number" column="tb_number" />
+		<result property="rb_number" column="rb_number" />
+		<result property="member_id" column="member_id" />
+	</resultMap>
+
+	<select id="select_fbReply" resultMap="replyResult"
+		parameterType="java.lang.Integer">
+	<![CDATA[
+		 select * from reply where fb_number = #{number}
+		 order by reply_date desc
+	
+	]]>
+	</select>
+
+	<select id="select_tbReply" resultMap="replyResult"
+		parameterType="java.lang.Integer">
+	<![CDATA[
+		select * from reply where tb_number = #{number}
+		order by reply_date desc
+	]]>
+	</select>
+	
+	<select id="select_rbReply" resultMap="replyResult"
+		parameterType="java.lang.Integer">
+	<![CDATA[
+		select * from reply where rb_number = #{number}
+		order by reply_date desc
+	]]>
+	</select>
+
+	<select id="selectReply" resultType="replyVO"
+		parameterType="java.lang.Integer">
+    <![CDATA[
+      SELECT * from reply
+      where reply_no = #{reply_no}		
+    ]]>
+	</select>
+
+	<delete id="deleteReply" parameterType="int">
+	  <![CDATA[
+      delete from reply
+      where reply_no = #{reply_no}
+    ]]>
+
+	</delete>
+
+	<select id="selectNewReplyNO" resultType="int">
+		<![CDATA[
+			SELECT max(reply_no) + 1 from reply		
+		]]>
+	</select>
+
+	<insert id="insertNewReply" parameterType="replyVO">
+		
+		<![CDATA[
+			INSERT into reply(reply_no, reply_content, reply_date, fb_number, tb_number, rb_number, member_id)
+			VALUES(#{reply_no}, #{reply_content}, sysdate, #{fb_number, jdbcType=INTEGER},
+			#{tb_number, jdbcType=INTEGER}, #{rb_number, jdbcType=INTEGER}, #{member_id})
+		]]>
+	</insert>
+
+
+
+
+
+
+</mapper>
+	

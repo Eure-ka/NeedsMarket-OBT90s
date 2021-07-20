@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.free_board">
+	<!-- 리절트 맵 정의 -->
+	<resultMap id="articlesResult" type="freeBoardVO">
+		<result property="fb_number" column="fb_number" />
+		<result property="fb_title" column="fb_title" />
+		<result property="fb_content" column="fb_content" />
+		<result property="member_id" column="member_id" />
+		<result property="fb_likenum" column="fb_likenum" />
+		<result property="fb_countnum" column="fb_countnum" />
+		<result property="fb_write_date" column="fb_write_date" />
+	</resultMap>
+
+	<resultMap id="imgResult" type="freeimageVO">
+		<result property="image_no" column="image_no" />
+		<result property="fb_number" column="fb_number" />
+		<result property="imageFileName" column="imageFileName" />
+
+	</resultMap>
+
+	<select id="selectAllArticlesList" resultMap="articlesResult">
+	<![CDATA[
+		SELECT * FROM free_board order by fb_write_date desc
+	]]>
+	</select>
+
+	<select id="selectArticle" resultType="freeBoardVO"
+		parameterType="java.lang.Integer">
+    <![CDATA[
+      SELECT * from free_board
+      where fb_number = #{fb_number}		
+    ]]>
+	</select>
+
+	<select id="selectNewArticleNO" resultType="int">
+		<![CDATA[
+			SELECT  nvl(max(fb_number), 0) + 1 from free_board		
+		]]>
+	</select>
+	
+	<select id="getTotal" resultType="int">
+		<![CDATA[
+			SELECT  count(*) from free_board		
+		]]>
+	</select>
+
+	<insert id="insertNewArticle" parameterType="java.util.Map">
+		<![CDATA[
+			INSERT into free_board(fb_number,  fb_title, fb_content,  member_id,fb_write_date,fb_countnum,fb_likenum)
+			VALUES(#{fb_number},#{fb_title},#{fb_content}, #{member_id},sysdate,0,0)
+		]]>
+	</insert>
+
+	<delete id="deleteArticle" parameterType="int">
+    <![CDATA[
+      delete from free_board where fb_number=#{fb_number}
+    ]]>
+	</delete>
+
+	<update id="boardHit" parameterType="int">
+		UPDATE free_board SET
+		fb_countnum = fb_countnum+1
+		WHERE fb_number = #{fb_number}
+	</update>
+
+	<insert id="insertNewImage" parameterType="java.util.Map">
+		<foreach item="item" collection="list" open="INSERT ALL"
+			separator=" " close="SELECT 
+		* FROM DUAL"> INTO
+			image(image_no, imageFileName, fb_number)
+			VALUES (#{item.image_no}, #{item.imageFileName}, #{item.fb_number})
+		</foreach>
+	</insert>
+
+	<select id="selectImageFileList" resultMap="imgResult"
+		parameterType="int"> 
+		<![CDATA[ SELECT * from image where fb_number=#{fb_number} ]]>
+	</select>
+	<select id="selectNewImageFileNO" resultType="int"> <![CDATA[ SELECT 
+		nvl(max(image_no),0) from image ]]>
+	</select>
+
+	<update id="updateArticle" parameterType="java.util.Map">
+		update free_board
+		set
+		fb_title=#{fb_title}, fb_content=#{fb_content}
+		where
+		fb_number=#{fb_number}
+	</update>
+	
+	<update id="recommend" parameterType="int">
+		update free_board
+		set fb_likenum = fb_likenum+1
+		where fb_number = #{fb_number}
+	</update>
+</mapper>

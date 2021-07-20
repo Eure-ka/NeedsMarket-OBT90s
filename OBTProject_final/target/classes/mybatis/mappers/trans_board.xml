@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.transboard">
+	<!-- 리절트 맵 정의 -->
+	<resultMap id="articlesResult" type="transBoardVO">
+
+		<result property="tb_number" column="tb_number" />
+		<result property="tb_title" column="tb_title" />
+		<result property="tb_content" column="tb_content" />
+		<result property="member_id" column="member_id" />
+
+		<result property="tb_likenum" column="tb_likenum" />
+		<result property="tb_countnum" column="tb_countnum" />
+		<result property="write_date" column="write_date" />
+	</resultMap>
+
+	<resultMap id="imgResult" type="transimageVO">
+		<result property="image_no" column="image_no" />
+		<result property="tb_number" column="tb_number" />
+		<result property="imageFileName" column="imageFileName" />
+	</resultMap>
+
+
+	<select id="selectAllArticlesList" resultMap="articlesResult">
+	<![CDATA[
+		select  * from trans_board order by write_date desc
+	]]>
+	</select>
+
+	<select id="selectArticle" resultType="transBoardVO"
+		parameterType="java.lang.Integer">
+    <![CDATA[
+      SELECT * from trans_board
+      where tb_number = #{tb_number}		
+    ]]>
+	</select>
+
+	<select id="selectNewArticleNO" resultType="int">
+		<![CDATA[
+			SELECT  nvl(max(tb_number), 0) + 1 from trans_board		
+		]]>
+	</select>
+
+	<insert id="insertNewArticle"  parameterType="java.util.Map">
+      <![CDATA[
+         INSERT into trans_board(tb_number, sales_price, product_name, trans_sort, contract_sort, tb_title, tb_content,  member_id,write_date,tb_countnum,tb_likenum)
+         VALUES(#{tb_number},#{sales_price},#{product_name},#{trans_sort},#{contract_sort},#{tb_title},#{tb_content}, #{member_id},sysdate,0,0)
+      ]]>      
+   </insert>
+
+	<insert id="insertNewImage" parameterType="java.util.Map">
+		<foreach item="item" collection="list" open="INSERT ALL"
+			separator=" " close="SELECT 
+		* FROM DUAL"> INTO
+			image(image_no, imageFileName, tb_number)
+			VALUES (#{item.image_no}, #{item.imageFileName}, #{item.tb_number})
+		</foreach>
+	</insert>
+
+	<delete id="deleteArticle" parameterType="int">
+    <![CDATA[
+     delete from trans_board where tb_number=#{tb_number}
+    ]]>
+	</delete>
+
+	<update id="boardHit" parameterType="int">
+		UPDATE trans_board SET
+		tb_countnum = tb_countnum+1
+		WHERE tb_number = #{tb_number}
+	</update>
+
+	<select id="selectNewImageFileNO" resultType="int"> <![CDATA[ SELECT 
+		nvl(max(image_no),0) from image ]]>
+	</select>
+
+	<select id="selectImageFileList" resultMap="imgResult"
+		parameterType="int"> 
+		<![CDATA[ SELECT * from image where tb_number=#{tb_number} ]]>
+	</select>
+
+	<update id="updateArticle" parameterType="java.util.Map">
+		update trans_board
+		set tb_title=#{tb_title}, tb_content=#{tb_content}
+		where
+		tb_number=#{tb_number}
+	</update>
+	
+	<update id="recommend" parameterType="int">
+		update trans_board
+		set tb_likenum = tb_likenum+1
+		where tb_number = #{tb_number}
+	</update>
+	
+</mapper>
